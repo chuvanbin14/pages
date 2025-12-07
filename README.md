@@ -1,244 +1,265 @@
-import React, { useEffect, useState } from "react";
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SodaMC • Survival</title>
+  <meta name="description" content="SodaMC Survival - Server Minecraft Việt Nam" />
 
-// Minecraft Server Website Starter (single-file React component)
-// - Tailwind CSS assumed present
-// - Replace placeholder data / endpoints with your backend or CMS
-// - Export default App to drop into a React app (Next.js, Vite, CRA)
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-export default function MinecraftServerWebsiteStarter() {
-  return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-black text-gray-100 font-sans">
-      <Header />
-      <main className="max-w-6xl mx-auto p-6">
-        <Hero />
-        <div className="grid gap-8 lg:grid-cols-3 mt-8">
-          <div className="lg:col-span-2 space-y-6">
-            <News />
-            <Events />
-          </div>
+  <style>
+    :root{
+      --bg:#0b0f0a; /* dark green */
+      --panel:#0f1410;
+      --accent:#8bd46b; /* green */
+      --accent-dark:#6db24f;
+      --muted:#aeb8a8;
+      --glass: rgba(255,255,255,0.04);
+      --glass-2: rgba(255,255,255,0.03);
+      --rounded:14px;
+      --container:1200px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter,system-ui,Arial;background:linear-gradient(180deg,var(--bg),#071007);color:#eaf2e8}
 
-          <aside className="space-y-6">
-            <ServerStatus />
-            <DiscordCard />
-            <DonateCard />
-            <StaffCard />
-          </aside>
-        </div>
+    /* layout */
+    header{background:linear-gradient(180deg, rgba(0,0,0,0.25), rgba(0,0,0,0.6)), url('https://i.imgur.com/7yKZQfR.jpg') center/cover no-repeat; padding:28px 18px;}
+    .wrap{max-width:var(--container);margin:0 auto;padding:0 20px}
 
-        <Footer />
-      </main>
-    </div>
-  );
-}
+    /* nav */
+    nav{display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .logo{display:flex;align-items:center;gap:12px}
+    .logo .mark{width:48px;height:48px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-dark));display:flex;align-items:center;justify-content:center;font-weight:700;color:#062007}
+    .sitename{font-weight:700;font-size:20px}
+    .nav-links{display:flex;gap:18px;align-items:center}
+    .nav-links a{color:var(--muted);text-decoration:none;font-weight:600}
+    .btn-join{background:var(--accent);color:#062007;padding:10px 16px;border-radius:10px;font-weight:700;text-decoration:none;box-shadow:0 6px 18px rgba(107,163,86,0.12)}
 
-function Header() {
-  return (
-    <header className="flex items-center justify-between py-4">
-      <div className="flex items-center gap-4">
-        <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-emerald-600 rounded-md flex items-center justify-center text-black font-bold">MC</div>
+    /* hero */
+    .hero{display:flex;flex-direction:column;align-items:flex-start;padding:50px 0}
+    .hero-inner{display:flex;gap:28px;align-items:center}
+    .hero-left{max-width:640px}
+    .hero h1{font-size:48px;margin:0 0 10px;line-height:1.02}
+    .hero p{margin:0 0 18px;color:var(--muted)}
+    .hero-cta{display:flex;gap:12px}
+    .ipbox{background:var(--glass);padding:10px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);font-weight:700}
+
+    /* features */
+    .section{padding:48px 0}
+    .title{font-size:28px;color:var(--accent);margin-bottom:18px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+    .card{background:linear-gradient(180deg,var(--panel),#0b1210);border-radius:var(--rounded);padding:18px;border:1px solid var(--glass-2);box-shadow:0 6px 18px rgba(0,0,0,0.4)}
+    .card h3{margin:0 0 8px;color:#dff4d7}
+    .muted{color:var(--muted);font-size:14px}
+
+    /* events / top */
+    .events .card{display:flex;flex-direction:column;gap:8px}
+    .event-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(139,212,107,0.12);color:var(--accent-dark);font-weight:700;font-size:13px}
+
+    /* top list */
+    .top-list{display:flex;flex-direction:column;gap:12px}
+    .player{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.02)}
+    .avatar{width:48px;height:48px;border-radius:8px;background:#001204;display:flex;align-items:center;justify-content:center;color:var(--accent);font-weight:800}
+    .player .meta{flex:1}
+    .player .meta b{display:block}
+    .rank{font-weight:800;color:var(--accent)}
+
+    /* responsive */
+    @media (max-width:980px){.grid{grid-template-columns:repeat(2,1fr)}.hero h1{font-size:40px}}
+    @media (max-width:700px){.grid{grid-template-columns:1fr}.hero-inner{flex-direction:column;align-items:flex-start}.nav-links{display:none}}
+
+    /* tiny helpers */
+    .small{font-size:13px;color:var(--muted)}
+
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <div class="logo">
+        <div class="mark">SD</div>
         <div>
-          <h1 className="text-xl font-semibold">YourServerName</h1>
-          <p className="text-xs text-gray-300">Vanilla / Survival / Creative</p>
+          <div class="sitename">SodaMC</div>
+          <div class="small">Survival Server</div>
         </div>
       </div>
 
-      <nav className="flex items-center gap-4">
-        <a className="text-sm hover:underline" href="#news">Tin tức</a>
-        <a className="text-sm hover:underline" href="#events">Sự kiện</a>
-        <a className="text-sm hover:underline" href="#discord">Discord</a>
-        <a className="inline-flex items-center gap-2 bg-emerald-500 text-black px-3 py-2 rounded-md text-sm" href="/download">Kết nối</a>
-      </nav>
-    </header>
-  );
-}
-
-function Hero() {
-  return (
-    <section className="bg-[url('https://images.unsplash.com/photo-1549887534-38f5b6b8b7a3?q=80&w=1600&auto=format&fit=crop&s=placeholder')] bg-cover bg-center rounded-2xl p-8 shadow-2xl">
-      <div className="backdrop-brightness-75 p-6 rounded-lg">
-        <h2 className="text-3xl font-extrabold">Chào mừng đến với YourServerName</h2>
-        <p className="mt-2 text-gray-200 max-w-2xl">Tham gia cộng đồng, tham dự sự kiện hàng tuần, kiếm phần thưởng, và xây dựng thế giới mơ ước của bạn.</p>
-
-        <div className="mt-6 flex gap-3">
-          <a className="px-5 py-3 rounded-lg bg-emerald-500 text-black font-semibold" href="/connect">Kết nối ngay</a>
-          <a className="px-5 py-3 rounded-lg border border-gray-600 text-sm" href="#events">Xem sự kiện</a>
-        </div>
-
-        <div className="mt-6 text-sm text-gray-300">IP: <strong>play.yourserver.com</strong> • Mode: Survival</div>
+      <div class="nav-links">
+        <a href="#news">Tin tức</a>
+        <a href="#events">Sự kiện</a>
+        <a href="#top">BXH</a>
+        <a href="#team">Đội ngũ</a>
+        <a class="btn-join" href="#join">Tham gia</a>
       </div>
-    </section>
-  );
-}
+    </nav>
 
-// ---------- NEWS ----------
-function News() {
-  // In production, fetch from /api/news
-  const [news, setNews] = useState(sampleNews);
+    <div class="hero">
+      <div class="hero-inner">
+        <div class="hero-left">
+          <h1>SodaMC • Survival</h1>
+          <p>Trải nghiệm Survival thuần Việt — Kinh tế, Đất đai, Guild, Jobs, Bosss và cộng đồng thân thiện.</p>
 
-  // Example of how to fetch live news (uncomment & adapt):
-  // useEffect(() => {
-  //   fetch('/api/news')
-  //     .then(r => r.json())
-  //     .then(setNews)
-  //     .catch(() => setNews(sampleNews));
-  // }, []);
-
-  return (
-    <section id="news" className="bg-gray-900/40 p-5 rounded-lg">
-      <div className="flex items-center justify-between">
-        <h3 className="text-2xl font-bold">Tin tức</h3>
-        <a className="text-sm text-gray-300 hover:underline" href="/news">Tất cả</a>
-      </div>
-
-      <ul className="mt-4 space-y-4">
-        {news.map((n) => (
-          <li key={n.id} className="p-4 bg-gray-800/40 rounded-md hover:scale-[1.01] transition-transform">
-            <a href={`/news/${n.id}`} className="flex items-start gap-4">
-              <img src={n.image} alt="thumbnail" className="w-28 h-16 object-cover rounded-md flex-shrink-0" />
-              <div>
-                <h4 className="font-semibold">{n.title}</h4>
-                <p className="text-xs text-gray-300">{n.date} • {n.excerpt}</p>
-              </div>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </section>
-  );
-}
-
-const sampleNews = [
-  { id: '1', title: 'Update 1.20: Thêm tính năng mới', date: '2025-12-01', excerpt: 'Bản cập nhật lớn với biome mới và items...', image: 'https://images.unsplash.com/photo-1549887534-38f5b6b8b7a3?q=80&w=800&auto=format&fit=crop&s=placeholder' },
-  { id: '2', title: 'Event: Cuộc đua xây dựng', date: '2025-11-20', excerpt: 'Cuộc thi xây dựng với phần thưởng hấp dẫn.', image: 'https://images.unsplash.com/photo-1526318472351-c75fcf0704d7?q=80&w=800&auto=format&fit=crop&s=placeholder' },
-];
-
-// ---------- EVENTS ----------
-function Events() {
-  // Placeholder events; replace by /api/events
-  const [events, setEvents] = useState(sampleEvents);
-
-  // Example fetch similar to News.
-  return (
-    <section id="events" className="bg-gray-900/40 p-5 rounded-lg">
-      <div className="flex items-center justify-between">
-        <h3 className="text-2xl font-bold">Sự kiện sắp tới</h3>
-        <a className="text-sm text-gray-300 hover:underline" href="/events">Tất cả</a>
-      </div>
-
-      <div className="mt-4 space-y-3">
-        {events.map((e) => (
-          <div key={e.id} className="p-4 bg-gray-800/30 rounded-md flex items-center justify-between">
-            <div>
-              <div className="text-sm text-gray-300">{e.date} • {e.time}</div>
-              <div className="font-semibold">{e.title}</div>
-              <div className="text-xs text-gray-300">{e.description}</div>
-            </div>
-            <a className="px-3 py-2 text-sm rounded-md border border-gray-700" href={`/events/${e.id}`}>Chi tiết</a>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-const sampleEvents = [
-  { id: 'e1', title: 'Build Battle (Team)', date: '2025-12-10', time: '19:00', description: 'Thi đấu theo đội, chủ đề: Lâu đài' },
-  { id: 'e2', title: 'PvP Tournament', date: '2025-12-17', time: '20:00', description: 'Loại trực tiếp, giải thưởng bằng items in-game' },
-];
-
-// ---------- SERVER STATUS ----------
-function ServerStatus() {
-  const [status, setStatus] = useState({ online: false, players: 0, max: 0 });
-
-  useEffect(() => {
-    // Replace with your server status API or ping library
-    // Example: /api/status -> { online: true, players: 5, max: 100 }
-    // For demo we set a timeout to simulate fetching
-    const t = setTimeout(() => {
-      setStatus({ online: true, players: 12, max: 120 });
-    }, 400);
-
-    return () => clearTimeout(t);
-  }, []);
-
-  return (
-    <div className="p-4 bg-gray-900/40 rounded-lg">
-      <h4 className="font-semibold">Trạng thái server</h4>
-      <div className="mt-3 flex items-center justify-between">
-        <div>
-          <div className={`inline-block px-3 py-1 rounded-full text-sm ${status.online ? 'bg-emerald-500 text-black' : 'bg-red-600'}`}>
-            {status.online ? 'Online' : 'Offline'}
+          <div class="hero-cta">
+            <div class="ipbox">IP: <strong>sodamc.com</strong></div>
+            <a class="btn-join" href="#join">Vào Survival</a>
+            <a href="#events" style="color:var(--muted);text-decoration:underline">Xem sự kiện</a>
           </div>
 
-          <div className="text-xs text-gray-300 mt-2">Người chơi: {status.players}/{status.max}</div>
+          <div style="margin-top:18px;color:var(--muted);font-size:14px">Phiên bản: <strong>1.8 - 1.21+</strong> • Chế độ: <strong>Survival</strong></div>
         </div>
-        <div className="text-right text-xs text-gray-400">IP: play.yourserver.com<br />Port: 25565</div>
+
+        <div class="hero-right" style="margin-left:auto;min-width:280px;">
+          <div class="card" style="padding:18px;">
+            <h3>Live: Players Online</h3>
+            <div style="font-size:36px;font-weight:800;color:var(--accent);margin-top:6px">128</div>
+            <div class="small" style="margin-top:8px">Server ổn định, ping thấp — join ngay để khám phá!</div>
+          </div>
+        </div>
       </div>
     </div>
-  );
-}
+  </div>
+</header>
 
-function DiscordCard() {
-  return (
-    <div id="discord" className="p-4 bg-gray-900/40 rounded-lg">
-      <h4 className="font-semibold">Discord</h4>
-      <p className="text-xs text-gray-300 mt-2">Tham gia cộng đồng trên Discord để nhận thông báo nhanh.</p>
+<main>
+  <div class="wrap">
 
-      {/* Replace the iframe src with your server's Discord widget URL (requires server ID) */}
-      <div className="mt-3">
-        <div className="w-full h-36 bg-gradient-to-b from-gray-800 to-gray-900 rounded-md flex items-center justify-center text-gray-400 text-sm">Discord widget preview</div>
+    <!-- Tin tức -->
+    <section id="news" class="section">
+      <div class="title">📢 Tin tức mới</div>
+      <div class="grid">
+        <article class="card">
+          <h3>Reset Season 6</h3>
+          <div class="small muted">Ngày: 01/01/2026</div>
+          <p class="muted">Reset đã hoàn tất — nhiều cấp độ, boss và tính năng mới. Tham gia để nhận quà tân thủ.</p>
+        </article>
+
+        <article class="card">
+          <h3>Update Boss Rừng</h3>
+          <div class="small muted">Ngày: 05/01/2026</div>
+          <p class="muted">Boss mới xuất hiện tại rừng tối — hợp tác săn boss để nhận đồ hiếm.</p>
+        </article>
+
+        <article class="card">
+          <h3>Giftcode SODA</h3>
+          <div class="small muted">Ngày: 10/01/2026</div>
+          <p class="muted">Nhập mã <b>SODASURVIVAL</b> để nhận kit miễn phí.</p>
+        </article>
       </div>
+    </section>
 
-      <a className="mt-3 inline-block text-sm underline text-gray-300" href="https://discord.gg/your-invite">Tham gia Discord</a>
-    </div>
-  );
-}
-
-function DonateCard() {
-  return (
-    <div className="p-4 bg-gray-900/40 rounded-lg">
-      <h4 className="font-semibold">Ủng hộ server</h4>
-      <p className="text-xs text-gray-300 mt-2">Hỗ trợ chi phí vận hành để giữ server hoạt động ổn định, nhận rank & perks.</p>
-      <div className="mt-4 flex gap-2">
-        <a className="px-3 py-2 rounded-md bg-amber-400 text-black text-sm" href="/donate">Donate</a>
-        <a className="px-3 py-2 rounded-md border border-gray-700 text-sm" href="/store">Cửa hàng</a>
+    <!-- Events -->
+    <section id="events" class="section events">
+      <div class="title">🎉 Sự kiện tháng</div>
+      <div class="grid">
+        <div class="card">
+          <span class="event-badge">Đua Top</span>
+          <h3>Đua Top Coins</h3>
+          <p class="muted">Top 1–3 nhận VIP & coins. Thời gian: 1 tháng.</p>
+        </div>
+        <div class="card">
+          <span class="event-badge">Hàng tuần</span>
+          <h3>Săn Boss Biển</h3>
+          <p class="muted">Team săn boss nhận vật phẩm giới hạn.</p>
+        </div>
+        <div class="card">
+          <span class="event-badge">Daily</span>
+          <h3>Rương Bí Ẩn</h3>
+          <p class="muted">Mỗi ngày 10 rương spawn ngẫu nhiên — ai nhanh người đó có.</p>
+        </div>
       </div>
-    </div>
-  );
-}
+    </section>
 
-function StaffCard() {
-  return (
-    <div className="p-4 bg-gray-900/40 rounded-lg">
-      <h4 className="font-semibold">Ban quản trị</h4>
-      <ul className="mt-3 text-sm text-gray-300 space-y-2">
-        <li>Haooo – Owner</li>
-        <li>Player1 – Admin</li>
-        <li>Builder2 – Builder</li>
-      </ul>
-    </div>
-  );
-}
+    <!-- Top players -->
+    <section id="top" class="section">
+      <div class="title">🏅 Top Survival</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Top Coins</h3>
+          <div class="top-list">
+            <div class="player"><div class="avatar">1</div><div class="meta"><b>RichKid</b><span class="small muted">250.000 coins</span></div><div class="rank">#1</div></div>
+            <div class="player"><div class="avatar">2</div><div class="meta"><b>MinerPro</b><span class="small muted">180.000 coins</span></div><div class="rank">#2</div></div>
+            <div class="player"><div class="avatar">3</div><div class="meta"><b>FarmerX</b><span class="small muted">150.000 coins</span></div><div class="rank">#3</div></div>
+          </div>
+        </div>
 
-function Footer() {
-  return (
-    <footer className="mt-10 text-center text-xs text-gray-400 p-6">
-      <div>© {new Date().getFullYear()} YourServerName — Đã đăng ký bản quyền</div>
-      <div className="mt-2">Made with ❤️ for your community • <a className="underline" href="/staff">Liên hệ</a></div>
-    </footer>
-  );
-}
+        <div class="card">
+          <h3>Top Playtime</h3>
+          <div class="top-list">
+            <div class="player"><div class="avatar">A</div><div class="meta"><b>PlayerA</b><span class="small muted">120 giờ</span></div><div class="rank">#1</div></div>
+            <div class="player"><div class="avatar">B</div><div class="meta"><b>PlayerB</b><span class="small muted">98 giờ</span></div><div class="rank">#2</div></div>
+            <div class="player"><div class="avatar">C</div><div class="meta"><b>PlayerC</b><span class="small muted">90 giờ</span></div><div class="rank">#3</div></div>
+          </div>
+        </div>
 
-// ----------------- NOTES -----------------
-// - Replace sample data with your CMS or REST endpoints.
-// - Consider: Next.js for SSR, Supabase/PlanetScale for DB, Strapi/Headless CMS for editors.
-// - For events/news CMS: use a simple admin page to create/edit posts (or use Netlify/Contentful/Strapi).
-// - For server status: use a Minecraft server ping library (e.g. 'minecraft-server-util') on the backend and expose /api/status.
-// - For authentication (staff/admin): use OAuth (Discord) + role checks.
+        <div class="card">
+          <h3>Top Boss Kills</h3>
+          <div class="top-list">
+            <div class="player"><div class="avatar">X</div><div class="meta"><b>KillerX</b><span class="small muted">350 kill</span></div><div class="rank">#1</div></div>
+            <div class="player"><div class="avatar">Y</div><div class="meta"><b>DarkBoy</b><span class="small muted">330 kill</span></div><div class="rank">#2</div></div>
+            <div class="player"><div class="avatar">Z</div><div class="meta"><b>Z3R0</b><span class="small muted">300 kill</span></div><div class="rank">#3</div></div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-// Optional: Provide example API responses used by this component
-export const exampleApi = {
-  '/api/news': sampleNews,
-  '/api/events': sampleEvents,
-  '/api/status': { online: true, players: 12, max: 120 },
-};
+    <!-- join detail -->
+    <section id="join" class="section">
+      <div class="title">🕹 Tham gia ngay</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Thông tin server</h3>
+          <p class="muted">IP: <strong>sodamc.com</strong><br>Phiên bản: <strong>1.8 - 1.21+</strong><br>Chế độ: <strong>Survival</strong></p>
+          <p class="muted">Plugin: Towny, Jobs, Economy, Bosses, CustomDungeons — hỗ trợ game-play sâu & lâu dài.</p>
+        </div>
+
+        <div class="card">
+          <h3>Hướng dẫn nhanh</h3>
+          <ol class="muted" style="padding-left:18px;margin:8px 0">
+            <li>Vào Minecraft → Multiplayer → Add Server</li>
+            <li>Nhập IP: <b>sodamc.com</b> → Join</li>
+            <li>Hoàn thành tutorial, nhận kit tân thủ</li>
+          </ol>
+        </div>
+
+        <div class="card">
+          <h3>Quy tắc cơ bản</h3>
+          <ul class="muted" style="padding-left:18px;margin:8px 0">
+            <li>Không gian lận (cheat, X-Ray)</li>
+            <li>Tôn trọng người chơi khác</li>
+            <li>Không grief khu vực của người khác</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- team -->
+    <section id="team" class="section">
+      <div class="title">👑 Đội ngũ vận hành</div>
+      <div class="grid">
+        <div class="card">
+          <h3>Haooo (Owner)</h3>
+          <p class="muted">Quản lý, phát triển plugin, sự kiện.</p>
+        </div>
+        <div class="card">
+          <h3>Admin Team</h3>
+          <p class="muted">Giám sát, xử lý report & bảo trì server.</p>
+        </div>
+        <div class="card">
+          <h3>Mod & Helpers</h3>
+          <p class="muted">Hỗ trợ người chơi, guide tân thủ.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer style="margin-top:40px;padding:30px 0;background:linear-gradient(180deg,rgba(0,0,0,0.2),rgba(0,0,0,0.35))">
+  <div class="wrap small">© 2026 SodaMC • Server Survival • Liên hệ: <strong>Haooo</strong></div>
+</footer>
+
+</body>
+</html>
